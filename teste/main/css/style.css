@@ -1,0 +1,81 @@
+ul {list-style-type: none;}
+body {font-family: Verdana, sans-serif;}
+
+body{
+    background-color: blueviolet;
+}
+
+.mes {
+    padding: 70px 25px;
+    width: 100%;
+    background: blueviolet;
+    text-align: center;
+}
+
+.mes ul {
+    margin: 0;
+    padding: 0;
+}
+
+.mes ul li {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.dataa{
+    position: absolute;
+    top:0;
+    right:0;
+    color: white;
+}
+
+.mes .prev {
+    float: left;
+    padding-top: 10px;
+}
+
+
+.mes .next {
+    float: right;
+    padding-top: 10px;
+}
+
+
+.diassemana {
+    margin: 0;
+    padding: 10px 0;
+    background-color:#ddd;
+}
+
+.diassemana li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+
+.dias {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+}
+
+.dias li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+
+
+.dias li .active {
+    padding: 5px;
+    background: blueviolet;
+    color: white !important
+}
