@@ -1,0 +1,44 @@
+.celula{
+    width: 200px;
+
+}
+
+.tabela-clientes{
+    width: 2000px;
+}
+
+.tabela{
+    width: 1500px;
+}
+
+.tabela2{
+    width: 1700px;
+}
+
+.tabela3{
+    width: 3200px;
+}
+
+.obs{
+    width: 400px;
+}
+
+.placa{
+    width: 90px;
+}
+
+.cliente{
+    width: 200px;
+}
+
+.acoes{
+    width: 100px;
+}
+
+.centralized{
+    text-indent: 20px;
+}
+
+.telefone{
+    width: 250px;
+}

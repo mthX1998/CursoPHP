@@ -1,0 +1,11 @@
+
+
+.warning-sucesso{
+    font: 5 'Fredoka One', cursive;
+    color:#40FF00;
+}
+
+.warning-erro{
+    font: 5 'Fredoka One', cursive;
+    color: red;
+}
