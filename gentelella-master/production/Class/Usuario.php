@@ -54,31 +54,22 @@
 
     public function insert(){
 
-        $conn = new PDO("mysql:dbname=pcdb; host=localhost", "root", "");
+        $conexao = new Conexao();
     
-        
         $sql = "INSERT INTO $this->table (nome,senha,nivel) VALUES (:nome, :senha, :nivel)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':nome',$this->nome);
-        $stmt->bindParam(':senha',$this->senha);
-        $stmt->bindParam(':nivel',$this->nivel);
-        return $stmt->execute();
-        
 
-        
+        return $conexao->query($sql, array(":nome" => $this->getNome() , ":senha" => $this->getSenha(), ":nivel" => $this->getNivel())); 
+    
     }
 
     public function update($id){
            
-        $conn = new PDO("mysql:dbname=pcdb; host=localhost", "root", "");
+        $conexao = new Conexao();
 
         $sql = "UPDATE $this->table SET nome = :nome, senha = :senha, nivel = :nivel WHERE id = :id";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':nome',$this->nome);
-        $stmt->bindParam(':senha',$this->senha);
-        $stmt->bindParam(':nivel',$this->nivel);
-        $stmt->bindParam(':id', $id);
-        return $stmt->execute();
+
+        return $conexao->query($sql, array(":nome" => $this->getNome() , ":senha" => $this->getSenha(), ":nivel" => $this->getNivel(), ":id" => $this->getId())); 
+
     }
 
 

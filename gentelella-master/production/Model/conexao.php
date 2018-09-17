@@ -3,7 +3,11 @@
  class Conexao extends PDO
  {
 
-    protected $conn;
+	protected $conn;
+	
+	public static function Conectar(){
+		$this->conn  = new PDO("mysql:dbname=pcdb; host=localhost", "root", "");
+	}
 
     public function __construct(){
        $this->conn  = new PDO("mysql:dbname=pcdb; host=localhost", "root", "");
@@ -42,7 +46,7 @@
 
 		$stmt = $this->query($rawQuery, $params);
 
-		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
  }
 

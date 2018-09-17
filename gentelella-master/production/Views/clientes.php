@@ -147,7 +147,14 @@
                     ?>
                    </p>
                    <p class="warning-erro">
-                     <?php if(isset($_SESSION['CadastroUsuarioErro'])){
+                     <?php                  
+                     if(isset($_SESSION['UsuarioErro'])){
+                      echo $_SESSION['UsuarioErro'];
+                      unset($_SESSION['UsuarioErro']);
+                      }
+                     
+                     
+                     if(isset($_SESSION['CadastroUsuarioErro'])){
                      echo $_SESSION['CadastroUsuarioErro'];
                      unset($_SESSION['CadastroUsuarioErro']);
                      }
@@ -348,6 +355,8 @@
                   </div>
                 </div>
 
+                
+
                 <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                           <div class="x_title">
@@ -358,7 +367,7 @@
                           <div class="x_content">
         
                             <div class="table-responsive">
-                              <table class="table jambo_table tabela2">
+                              <table class="table jambo_table tabela-clientes">
                                 <thead>
                                   <tr class="">
 
@@ -394,12 +403,12 @@
                                     <td class=" "><?php echo $value->cidade; ?></td>
                                     <td class=" "><?php echo $value->uf; ?></td>
                                     <td class=" "><?php echo $value->cep; ?></td>
-                                    <td class=" "><?php echo $value->cpf; ?></td>
+                                    <td class="cpf"><?php echo $value->cpf; ?></td>
                                     <td class=" "><?php echo $value->email; ?></td>
                                     <td class=" " style="text-align: center"><?php echo $value->usuario; ?></td>
-                                    <td class=" last" style="width: 100px"><a href="condutores.php">Condutores <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
+                                    <td class=" last" style="width: 100px"> <?php echo "<a href='condutores.php?id=" . $value->id . "'>Condutores <span class='glyphicon glyphicon-user' aria-hidden='true'></span></a> "; ?></td>
                                     <td class=" last" style="width: 80px"> <?php echo "<a href='clientes.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
-                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCliente.php?&id=" . $value->id . "' data-confirm='Deseja excluir este cliente? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCliente.php?&id=" . $value->id . "' data-confirm-cliente='Deseja excluir este cliente? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
 
                                   <?php endforeach; ?>
@@ -467,7 +476,7 @@
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
 
-    <script src="../../build/js/modal.js"></script>
+    <script src="../../build/js/modalCliente.js"></script>
 	
   </body>
 </html>

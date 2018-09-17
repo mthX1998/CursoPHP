@@ -40,6 +40,22 @@
         return $stmt->execute();
     }
 
+    public function checkDeleteUser(){
+
+        if($_SESSION['usuarioNiveisAcessoId'] == 3 or  $_SESSION['usuarioNiveisAcessoId'] == 4){
+            $_SESSION['UsuarioErro'] = "Você não tem permissão para exclusão deste registro!";
+            return true;
+        }
+    }
+
+    public function checkCreate(){
+
+        if($_SESSION['usuarioNiveisAcessoId'] == 4){
+            $_SESSION['UsuarioErro'] = "Você não tem permissão para cadastro de registros!";
+            return true;
+        }
+    }
+
 
   }
 

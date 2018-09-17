@@ -1,28 +1,20 @@
 <?php
 
-
 require_once '../Model/dao.php';
 
-class Cliente extends dao{
+class Condutor extends dao{
 
-
-    protected $table = 'clientes';
+    protected $table = 'condutores';
     private $id;
     private $nome;
-    private $profissao;
-    private $endereco;
-    private $numhab;
-    private $telefone1;
-    private $telefone2;
-    private $bairro;
-    private $cidade;
+    private $rg;
+    private $hab;
+    private $reg;
+    private $val;
     private $cpf;
-    private $uf;
-    private $cep;
-    private $email;
-    private $usuario;
+    private $cliente;
+    private $user;
 
-    
     public function getId(){
         return $this->id;
     }
@@ -39,63 +31,38 @@ class Cliente extends dao{
         $this->nome = $nome;
     }
 
-    public function getProfissao(){
-        return $this->profissao;
+    public function getRg(){
+        return $this->rg;
     }
 
-    public function setProfissao($profissao){
-        $this->profissao = $profissao;
+    public function setRg($rg){
+        $this->rg = $rg;
     }
 
-    public function getEndereco(){
-        return $this->endereco;
+    public function getHab(){
+        return $this->hab;
     }
 
-    public function setEndereco($endereco){
-        $this->endereco = $endereco;
+    public function setHab($hab){
+        $this->hab = $hab;
     }
 
-    public function getNumhab(){
-        return $this->numhab;
+    public function getReg(){
+        return $this->reg;
     }
 
-    public function setNumhab($numhab){
-        $this->numhab = $numhab;
-    }
-
-    public function getTel1(){
-        return $this->telefone1;
+    public function setReg($reg){
+        $this->reg = $reg;
     }
  
-    public function setTel1($telefone1){
-        $this->telefone1 = $telefone1;
+    public function getVal(){
+        return $this->val;
     }
 
-
-    public function getTel2(){
-        return $this->telefone2;
+    public function setVal($val){
+        $this->val = $val;
     }
 
-    public function setTel2($telefone2){
-        $this->telefone2 = $telefone2;
-    }
-
-    public function getBairro(){
-        return $this->bairro;
-    }
-
-    public function setBairro($bairro){
-        $this->bairro = $bairro;
-    }
-
-    public function getCidade(){
-        return $this->cidade;
-    }
-
-    public function setCidade($cidade){
-        $this->cidade = $cidade;
-    }
- 
     public function getCpf(){
         return $this->cpf;
     }
@@ -104,38 +71,32 @@ class Cliente extends dao{
         $this->cpf = $cpf;
     }
 
-    public function getUf(){
-        return $this->uf;
+    public function getCliente(){
+        return $this->cliente;
     }
 
-    public function setUf($uf){
-        $this->uf = $uf;
+    public function setCliente($cliente){
+        $this->cliente = $cliente;
+    }
+ 
+    public function getUser(){
+        return $this->user;
     }
 
-    public function getCep(){
-        return $this->cep;
+    public function setUser($user){
+        $this->user = $user;
     }
 
-    public function setCep($cep){
-        $this->cep = $cep;
-    }
 
-    public function getEmail(){
-        return $this->email;
-    }
 
-    public function setEmail($email){
-        $this->email = $email;
-    }
+    public function findById($id){
+        
+        $conexao = new Conexao();
 
-    public function getIduser(){
-        return $this->usuario;
-    }
+        $sql = "SELECT * FROM $this->table WHERE cliente = :id";
 
-    public function setIduser($usuario){
-        $this->usuario = $usuario;
+        return $conexao->select($sql, array(":id" => $id));
     }
-
 
     public function insert(){
 
@@ -156,18 +117,12 @@ class Cliente extends dao{
         return $conexao->query($sql, array(":nome" => $this->getNome(), ":profissao" => $this->getProfissao(), ":endereco" => $this->getEndereco(), ":numhab" => $this->getNumhab(), ":tel1" => $this->getTel1(), ":tel2" => $this->getTel2(), ":bairro" => $this->getBairro(), ":cidade" => $this->getCidade(), ":cpf" => $this->getCpf(), ":uf" => $this->getUf(), ":cep" => $this->getCep(), ":email" => $this->getEmail(), ":id" => $this->getId()));
 
     }
-
-    public function findClientes($nome,$cpf){
-        
-        $conexao = new Conexao();
-
-        $sql = "SELECT * FROM $this->table WHERE nome LIKE '%:nome%' AND cpf LIKE '%:cpf%' ";
-
-        return $conexao->select($sql, array(":nome" => $nome, ":cpf" => $cpf));
-    }
-
-
 }
+
+
+
+
+
 
 
 

@@ -1,5 +1,9 @@
 <?php
-  session_start();
+require_once '../Controllers/config.php';
+
+session_start();
+
+$cliente = new Cliente();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -133,7 +137,7 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="#">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Nome 
@@ -146,7 +150,7 @@
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">CPF<span class="required">*</span>
                             </label>
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="cpf" required="required"  class="form-control col-md-3 col-xs-12">
+                              <input type="text" id="last-name" name="cpf" class="form-control col-md-3 col-xs-12">
                             </div>
                       </div>
 
@@ -176,7 +180,7 @@
                           <div class="x_content">
         
                             <div class="table-responsive">
-                              <table class="table jambo_table tabela">
+                              <table class="table jambo_table tabela-clientes">
                                 <thead>
                                   <tr class="">
 
@@ -193,29 +197,60 @@
                                     <th class="column-title">CPF</th>
                                     <th class="column-title">Email</th>
                                     <th class="column-title">Usuário</th>
-                                    <th class="column-title no-link last" colspan="3" style="text-indent: 80px">Ações</th>
+                                    <th class="column-title no-link last" colspan="4" style="text-indent: 80px">Ações</th>
                                   </tr>
                                 </thead>
+                                
         
                                 <tbody>
+                                <?php if($_SERVER['REQUEST_METHOD']=='POST'): ?>
+                                <?php $nome = $_POST['nome']; $cpf = $_POST['cpf']; ?>
+                                <?php foreach ($cliente->findClientes($nome,$cpf) as $key => $value): ?>
                                   <tr class="even pointer">
-                                    <td class=" ">1</td>
-                                    <td class=" ">Matheus</td>
-                                    <td class=" ">Analista</td>
-                                    <td class="celula">Rua Ilo Fernandes N 64 - Condomínio Morada do Sol</td>
-                                    <td class=" ">(84) 99696-6663</td>
-                                    <td class=" ">(84) 99696-6662</td>
-                                    <td class=" ">Capim Macio</td>
-                                    <td class=" ">Natal</td>
-                                    <td class=" ">RN</td>
-                                    <td class=" ">59082-323</td>
-                                    <td class=" ">404.586.268-48</td>
-                                    <td class=" ">mancini995@gmail.com</td>
-                                    <td class=" " style="text-align: center">2</td>
-                                    <td class=" last"><a href="#">Condutores <span class="glyphicon glyphicon-user" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->nome; ?></td>
+                                    <td class=" "><?php echo $value->profissao; ?></td>
+                                    <td class="celula"><?php echo $value->endereco; ?></td>
+                                    <td class=" "><?php echo $value->numhab; ?></td>
+                                    <td class="telefone" style="width: 150px"><?php echo $value->telefone1; ?></td>
+                                    <td class="telefone" style="width: 150px"><?php echo $value->telefone2; ?></td>
+                                    <td class=" "><?php echo $value->bairro; ?></td>
+                                    <td class=" "><?php echo $value->cidade; ?></td>
+                                    <td class=" "><?php echo $value->uf; ?></td>
+                                    <td class=" "><?php echo $value->cep; ?></td>
+                                    <td class="cpf"><?php echo $value->cpf; ?></td>
+                                    <td class=" "><?php echo $value->email; ?></td>
+                                    <td class=" " style="text-align: center"><?php echo $value->usuario; ?></td>
+                                    <td class=" last" style="width: 100px"> <?php echo "<a href='condutores.php?id=" . $value->id . "'>Condutores <span class='glyphicon glyphicon-user' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a href='clientes.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCliente.php?&id=" . $value->id . "' data-confirm-cliente='Deseja excluir este cliente? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
+                                  <?php endforeach; ?>
+                          
+                                  <?php endif; ?>
+
+                                <?php foreach ($cliente->findAll() as $key => $value): ?>
+                                  <tr class="even pointer">
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->nome; ?></td>
+                                    <td class=" "><?php echo $value->profissao; ?></td>
+                                    <td class="celula"><?php echo $value->endereco; ?></td>
+                                    <td class=" "><?php echo $value->numhab; ?></td>
+                                    <td class="telefone" style="width: 150px"><?php echo $value->telefone1; ?></td>
+                                    <td class="telefone" style="width: 150px"><?php echo $value->telefone2; ?></td>
+                                    <td class=" "><?php echo $value->bairro; ?></td>
+                                    <td class=" "><?php echo $value->cidade; ?></td>
+                                    <td class=" "><?php echo $value->uf; ?></td>
+                                    <td class=" "><?php echo $value->cep; ?></td>
+                                    <td class="cpf"><?php echo $value->cpf; ?></td>
+                                    <td class=" "><?php echo $value->email; ?></td>
+                                    <td class=" " style="text-align: center"><?php echo $value->usuario; ?></td>
+                                    <td class=" last" style="width: 100px"> <?php echo "<a href='condutores.php?id=" . $value->id . "'>Condutores <span class='glyphicon glyphicon-user' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a href='clientes.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCliente.php?&id=" . $value->id . "' data-confirm-cliente='Deseja excluir este cliente? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
+                                  </tr>
+                                  
+                                  <?php endforeach; ?>
                                 </tbody>
                               </table>
                             </div>

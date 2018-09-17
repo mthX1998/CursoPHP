@@ -24,7 +24,7 @@
 
     if($usuario->insert()){
         header("Location: ../Views/usuarios.php");
-        $_SESSION['CadastroUsuario'] = "Usuário Cadastrado com Sucesso!";
+        $_SESSION['CadastroUsuario'] = "Usuário gerado com Sucesso!";
     }
     
 

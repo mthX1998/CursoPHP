@@ -1,5 +1,12 @@
 <?php
+
+  require_once '../Controllers/config.php';
+
    session_start();
+
+   $condutor = new Condutor;
+
+   $id = (int)$_GET['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -121,6 +128,7 @@
               <div class="title_left">
                 <h3>Cadastro de Condutores Autorizados</h3>
               </div>
+             
 
             </div>
             <div class="clearfix"></div>
@@ -128,7 +136,7 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Formulário de cadastro  <small>Campos com * são obrigatórios</small></h2>
+                    <h2>Formulário de cadastro  <small>Campos com * são obrigatórios  Obs: Para clientes estrangeiros substitua o RG pelo passaporte</small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
@@ -208,24 +216,28 @@
                                     <th class="column-title">Nº Registro</th>
                                     <th class="column-title">Validade</th>
                                     <th class="column-title">CPF</th>
+                                    <th class="column-title">Cliente</th>
                                     <th class="column-title">Usuário</th>
                                     <th class="column-title no-link last" colspan="2" style="text-indent: 80px">Ações</th>
                                   </tr>
                                 </thead>
         
                                 <tbody>
+                                <?php foreach ($condutor->findById($id) as $key => $value): ?>
                                   <tr class="even pointer">
-                                    <td class=" ">1</td>
-                                    <td class=" ">Matheus</td>
-                                    <td class=" ">47.805.528-6</td>
-                                    <td class="celula">201500976098786</td>
-                                    <td class=" ">8475375993938804048638</td>
-                                    <td class=" ">21/06/2021</td>
-                                    <td class=" ">404.586.268-48</td>
-                                    <td class=" ">2</td>
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->nome; ?></td>
+                                    <td class=" "><?php echo $value->rg; ?></td>
+                                    <td class="celula"><?php echo $value->hab; ?></td>
+                                    <td class=" "><?php echo $value->reg; ?></td>
+                                    <td class=" "><?php echo $value->val; ?></td>
+                                    <td class=" "><?php echo $value->cpf; ?></td>
+                                    <td class=" "><?php echo $value->cliente; ?></td>
+                                    <td class=" "><?php echo $value->user; ?></td>
                                     <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
                                     <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
                                   </tr>
+                                  <?php endforeach; ?>
                                 </tbody>
                               </table>
                             </div>

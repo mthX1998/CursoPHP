@@ -19,7 +19,7 @@ $uf = $_POST['uf'];
 $cpf = $_POST['cpf'];
 $email = $_POST['email'];
 $hab = $_POST['hab'];
-$user = $_SESSION['usuarioNiveisAcessoId'];
+$user = $_SESSION['usuarioId'];
 
 $cliente->setId($id);
 $cliente->setNome($nome);

@@ -19,7 +19,7 @@ $uf = $_POST['uf'];
 $cpf = $_POST['cpf'];
 $email = $_POST['email'];
 $hab = $_POST['hab'];
-$user = $_SESSION['usuarioNiveisAcessoId'];
+$user = $_SESSION['usuarioId'];
 
 
 $cliente->setNome($nome);
@@ -36,12 +36,15 @@ $cliente->setEmail($email);
 $cliente->setNumhab($hab);
 $cliente->setIduser($user);
 
-if($cliente->insert()){
+if($cliente->checkCreate()){
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuario'] = "Usuário Cadastrado com Sucesso!";
+}
+else if($cliente->insert()){
+    header("Location: ../Views/clientes.php");
+    $_SESSION['CadastroUsuario'] = "Cliente Cadastrado com Sucesso!";
 }else{
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuarioErro'] = "ERRO";
+    $_SESSION['CadastroUsuarioErro'] = "ERRO ao cadastrar Cliente";
 }
 
 
