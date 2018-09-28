@@ -1,5 +1,10 @@
 <?php
-   session_start();
+
+  require_once '../Controllers/config.php';
+
+  session_start();
+ 
+  $lancamento = new Lancamento();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +39,8 @@
 
     <!-- Custom Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
+
+    <link href="../../build/css/sessao.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -130,21 +137,50 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  <p class="warning-sucesso">
+                     <?php if(isset($_SESSION['CadastroLancamento'])){
+                     echo $_SESSION['CadastroLancamento'];
+                     unset($_SESSION['CadastroLancamento']);
+                     }
+                    ?>
+                   </p>
+                   <p class="warning-erro">
+                     <?php                  
+                     if(isset($_SESSION['UsuarioErro'])){
+                      echo $_SESSION['UsuarioErro'];
+                      unset($_SESSION['UsuarioErro']);
+                      }
+                     
+                     
+                     if(isset($_SESSION['CadastroLancamentoErro'])){
+                     echo $_SESSION['CadastroLancamentoErro'];
+                     unset($_SESSION['CadastroLancamentoErro']);
+                     }
+                    ?>
+                   </p>
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <?php if(isset($_GET['acao']) && $_GET['acao'] == 'editar'): ?>
+
+                    <?php  
+                       $id = (int)$_GET['id'];
+
+                       $resultado = $lancamento->find($id);
+                    
+                    ?>
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/atualizarLancamento.php">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Valor<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <input type="number" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="" id="first-name" name="valor" value="<?php echo $resultado->valor; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Tipo<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                                <select class="form-control" name="priv">
-                                        <option value="1">Entrada</option>
-                                        <option value="2">Saída</option>
+                                <select class="form-control" name="tipo">
+                                        <option value="Entrada">Entrada</option>
+                                        <option value="Saida">Saida</option>
                                 </select>
                         </div>
                       </div>
@@ -152,29 +188,70 @@
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Origem<span class="required">*</span>
                             </label>
                             <div class="col-md-5 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="senha" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="last-name" name="origem" value="<?php echo $resultado->origem; ?>" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
+                            <input type="hidden" name="id" value="<?php echo $resultado->id; ?>">
                           </div>            
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <a href="index.html"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                          <a href="caixa.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
                           <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                          <button type="submit" class="btn btn-round btn-success">Cadastrar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-primary">Atualizar Lançamento <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
                         </div>
                       </div>
 
                     </form>
+
+                     <?php else: ?>
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/CadastrarLancamento.php">
+
+                    <div class="form-group">
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Valor<span class="required">*</span>
+                      </label>
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                        <input type="" id="first-name" name="valor" required="required" class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Tipo<span class="required">*</span>
+                      </label>
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                              <select class="form-control" name="tipo">
+                                      <option value="Entrada">Entrada</option>
+                                      <option value="Saida">Saida</option>
+                              </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Origem<span class="required">*</span>
+                          </label>
+                          <div class="col-md-5 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="origem" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>            
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                        <a href="caixa.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                        <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                        <button type="submit" class="btn btn-round btn-success">Gerar Lançamento <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                      </div>
+                    </div>
+
+                    </form>
+
+                    <?php endif; ?>
                   </div>
                 </div>
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                           <div class="x_title">
-                            <h2>Caixa atual: </h2>
+                            <h2>Caixa atual: <?php echo "R$ ".number_format($lancamento->getSaldo(),2,',','.'); ?></h2>
                             <br><br>
-                            <h2>Lançamentos:</h2>
+                            <h2>Lançamentos</h2>
                             <div class="clearfix"></div>
                           </div>
         
@@ -188,6 +265,7 @@
                                     <th class="column-title">Id</th>
                                     <th class="column-title">Valor</th>
                                     <th class="column-title">Tipo</th>
+                                    <th class="column-title">Data</th>
                                     <th class="column-title">Origem</th>
                                     <th class="column-title">Usuário</th>
                                     <th class="column-title no-link last" colspan="2" style="text-indent: 60px">Ações</th>
@@ -195,15 +273,19 @@
                                 </thead>
         
                                 <tbody>
+                                <?php foreach ($lancamento->findAll() as $key => $value): ?>
+                                <?php $datalancamento = new Datetime($value->datalanc); ?>
                                   <tr class="even pointer">
-                                    <td class=" ">1</td>
-                                    <td class=" ">590,00</td>
-                                    <td class=" ">Entrada</td>
-                                    <td class=" ">Empréstimo Caixa</td>
-                                    <td class=" ">2</td>
-                                    <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->valor; ?></td>
+                                    <td class=" "><?php echo $value->tipo; ?></td>
+                                    <td class="celula"><?php echo $datalancamento->format("d/m/Y"); ?></td>
+                                    <td class=" "><?php echo $value->origem; ?></td>
+                                    <td class=" " style="text-indent: 20px;"><?php echo $value->usuario; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a href='caixa.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarLancamento.php?&id=" . $value->id . "' data-confirm-lancamento='Deseja excluir este lançamento? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
+                                  <?php endforeach; ?>
                                 </tbody>
                               </table>
                             </div>
@@ -267,6 +349,8 @@
     <script src="../../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+
+    <script src="../../build/js/modalLancamento.js"></script>
 	
   </body>
 </html>

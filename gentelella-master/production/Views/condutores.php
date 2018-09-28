@@ -4,9 +4,9 @@
 
    session_start();
 
-   $condutor = new Condutor;
+   $condutor = new Condutor();
 
-   $id = (int)$_GET['id'];
+   $idcli = (int)$_GET['id'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,6 +43,7 @@
     <link href="../../build/css/custom.min.css" rel="stylesheet">
 
     <link href="../../build/css/table.css" rel="stylesheet">
+    <link href="../../build/css/sessao.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -140,58 +141,148 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  <p class="warning-sucesso">
+                     <?php if(isset($_SESSION['CadastroCondutor'])){
+                     echo $_SESSION['CadastroCondutor'];
+                     unset($_SESSION['CadastroCondutor']);
+                     }
+                    ?>
+                   </p>
+                   <p class="warning-erro">
+                     <?php                  
+                     if(isset($_SESSION['UsuarioErro'])){
+                      echo $_SESSION['UsuarioErro'];
+                      unset($_SESSION['UsuarioErro']);
+                      }
+                     
+                     
+                     if(isset($_SESSION['CadastroCondutorErro'])){
+                     echo $_SESSION['CadastroCondutorErro'];
+                     unset($_SESSION['CadastroCondutorErro']);
+                     }
+                    ?>
+                   </p>
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+
+                    <?php if(isset($_GET['acao']) && $_GET['acao'] == 'editar'): ?>
+
+                    <?php  
+                    $id = (int)$_GET['idcon'];
+
+                    $resultado = $condutor->find($id);
+
+                    ?>
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/atualizarCondutor.php">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Nome<span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="first-name" name="nome" value="<?php echo $resultado->nome; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">RG<span class="required">*</span>
                         </label>
                         <div class="col-md-4 col-sm-6 col-xs-12">
-                          <input type="text" id="last-name" name="profissao" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="last-name" name="rg" value="<?php echo $resultado->rgpassport; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="form-group">
                             <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">N° Habilitação<span class="required">*</span>
                             </label>
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="endereco" required="required"  class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="last-name" name="numhab" value="<?php echo $resultado->numhab; ?>" required="required"  class="form-control col-md-7 col-xs-12">
                          </div>
                          <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">N° Registro<span class="required">*</span>
                          </label>
                          <div class="col-md-2 col-sm-6 col-xs-12">
-                           <input type="text" id="last-name" name="cep" required="required"  class="form-control col-md-7 col-xs-12">
+                           <input type="text" id="last-name" name="reg" value="<?php echo $resultado->numregistro; ?>" required="required"  class="form-control col-md-7 col-xs-12">
                       </div>
                      </div>
                      <div class="form-group">
                             <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Validade<span class="required">*</span>
                             </label>
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                              <input type="date" id="last-name" name="telefone1" required="required"  class="form-control col-md-3 col-xs-12">
+                              <input type="date" id="last-name" name="validade" value="<?php echo $resultado->validade; ?>" required="required"  class="form-control col-md-3 col-xs-12">
                             </div>
                             <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">CPF<span class="required">*</span>
                             </label>
                             <div class="col-md-2 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="telefone2" required="required" class="form-control col-md-3 col-xs-12">
+                              <input type="text" id="last-name" name="cpf" value="<?php echo $resultado->cpf; ?>" required="required" class="form-control col-md-3 col-xs-12">
                          </div>
+                         <input type="hidden" name="cliente" value="<?php echo $idcli; ?>">
                      </div>         
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <a href="index.html"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                        <?php echo "<a href='condutores.php?id=" . $idcli . "'><button class='btn btn-round btn-danger' type='button'>Cancelar <span class='glyphicon glyphicon-remove-circle' aria-hidden='true'></span></button></a>"; ?>
                           <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                          <button type="submit" class="btn btn-round btn-success">Cadastrar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-primary">Atualizar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
                         </div>
+                        <input type="hidden" name="id" value="<?php echo $resultado->id; ?>">
                       </div>
 
                     </form>
+
+                    <?php else: ?>
+
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/cadastrarCondutor.php">
+
+                    <div class="form-group">
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Nome<span class="required">*</span>
+                      </label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">RG<span class="required">*</span>
+                      </label>
+                      <div class="col-md-4 col-sm-6 col-xs-12">
+                        <input type="text" id="last-name" name="rg" required="required" class="form-control col-md-7 col-xs-12">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">N° Habilitação<span class="required">*</span>
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="numhab" required="required"  class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">N° Registro<span class="required">*</span>
+                      </label>
+                      <div class="col-md-2 col-sm-6 col-xs-12">
+                        <input type="text" id="last-name" name="reg" required="required"  class="form-control col-md-7 col-xs-12">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Validade<span class="required">*</span>
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12">
+                            <input type="date" id="last-name" name="validade" required="required"  class="form-control col-md-3 col-xs-12">
+                          </div>
+                          <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">CPF<span class="required">*</span>
+                          </label>
+                          <div class="col-md-2 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="cpf" required="required" class="form-control col-md-3 col-xs-12">
+                      </div>
+                      <input type="hidden" name="cliente" value="<?php echo $idcli; ?>">
+                    </div>         
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <?php echo "<a href='condutores.php?id=" . $idcli . "'><button class='btn btn-round btn-danger' type='button'>Cancelar <span class='glyphicon glyphicon-remove-circle' aria-hidden='true'></span></button></a>"; ?>
+                        <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                        <button type="submit" class="btn btn-round btn-success">Cadastrar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                      </div>
+                    </div>
+
+                    </form>
+
+                    <?php endif; ?>
                   </div>
                 </div>
 
@@ -216,26 +307,27 @@
                                     <th class="column-title">Nº Registro</th>
                                     <th class="column-title">Validade</th>
                                     <th class="column-title">CPF</th>
-                                    <th class="column-title">Cliente</th>
                                     <th class="column-title">Usuário</th>
-                                    <th class="column-title no-link last" colspan="2" style="text-indent: 80px">Ações</th>
+                                    <th class="column-title no-link last" colspan="2" style="text-indent: 45px">Ações</th>
                                   </tr>
                                 </thead>
         
                                 <tbody>
-                                <?php foreach ($condutor->findById($id) as $key => $value): ?>
+                                <?php foreach ($condutor->findById($idcli) as $key => $value): ?>
                                   <tr class="even pointer">
+                                    <?php 
+                                    $datavalidade = new Datetime($value->validade);
+                                    ?>
                                     <td class=" "><?php echo $value->id; ?></td>
                                     <td class=" "><?php echo $value->nome; ?></td>
-                                    <td class=" "><?php echo $value->rg; ?></td>
-                                    <td class="celula"><?php echo $value->hab; ?></td>
-                                    <td class=" "><?php echo $value->reg; ?></td>
-                                    <td class=" "><?php echo $value->val; ?></td>
+                                    <td class=" "><?php echo $value->rgpassport; ?></td>
+                                    <td class="celula"><?php echo $value->numhab; ?></td>
+                                    <td class=" "><?php echo $value->numregistro; ?></td>
+                                    <td class=" "><?php echo $datavalidade->format("d/m/Y"); ?></td>
                                     <td class=" "><?php echo $value->cpf; ?></td>
-                                    <td class=" "><?php echo $value->cliente; ?></td>
-                                    <td class=" "><?php echo $value->user; ?></td>
-                                    <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                                    <td class=" " style="text-indent: 15px;"><?php echo $value->usuario; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a href='condutores.php?acao=editar&id=" . $idcli . "&idcon=". $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCondutor.php?&id=" . $idcli . "&idcon=". $value->id ."' data-confirm-condutor='Deseja excluir este condutor? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
                                   <?php endforeach; ?>
                                 </tbody>
@@ -301,6 +393,8 @@
     <script src="../../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+
+    <script src="../../build/js/modalCondutor.js"></script>
 	
   </body>
 </html>

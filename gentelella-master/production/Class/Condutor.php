@@ -4,7 +4,7 @@ require_once '../Model/dao.php';
 
 class Condutor extends dao{
 
-    protected $table = 'condutores';
+    protected $table = 'Condutores';
     private $id;
     private $nome;
     private $rg;
@@ -102,9 +102,9 @@ class Condutor extends dao{
 
         $conexao = new Conexao();
     
-        $sql = "INSERT INTO $this->table (nome,profissao,endereco,numhab,telefone1,telefone2,bairro,cidade,cpf,uf,cep,email,usuario) VALUES (:nome, :profissao, :endereco, :numhab, :tel1, :tel2, :bairro, :cidade, :cpf, :uf,:cep, :email,:usuario)";
+        $sql = "INSERT INTO $this->table (nome,rgpassport,numhab,numregistro,validade,cpf,cliente,usuario) VALUES (:nome, :rgpassport, :numhab, :numregistro, :validade, :cpf, :cliente,:usuario)";
         
-        return $conexao->query($sql, array(":nome" => $this->getNome(), ":profissao" => $this->getProfissao(), ":endereco" => $this->getEndereco(), ":numhab" => $this->getNumhab(), ":tel1" => $this->getTel1(), ":tel2" => $this->getTel2(), ":bairro" => $this->getBairro(), ":cidade" => $this->getCidade(), ":cpf" => $this->getCpf(), ":uf" => $this->getUf(), ":cep" => $this->getCep(), ":email" => $this->getEmail(), ":usuario" => $this->getIduser() ) );
+        return $conexao->query($sql, array(":nome" => $this->getNome(), ":rgpassport" => $this->getRg(), "numhab" => $this->getHab(), ":numregistro" => $this->getReg(), ":validade" => $this->getVal(), ":cpf" => $this->getCpf(), ":cliente" => $this->getCliente(), ":usuario" => $this->getUser()));
 
     }
 
@@ -112,9 +112,9 @@ class Condutor extends dao{
 
         $conexao = new Conexao();
     
-        $sql = "UPDATE $this->table SET nome = :nome, profissao = :profissao , endereco = :endereco , numhab = :numhab, telefone1 = :tel1, telefone2 = :tel2, bairro = :bairro, cidade = :cidade, cpf = :cpf, uf = :uf , cep = :cep ,email = :email WHERE id = :id";
+        $sql = "UPDATE $this->table SET nome = :nome , rgpassport = :rgpassport, numhab = :numhab, numregistro = :numregistro , validade = :validade, cpf = :cpf  WHERE id = :id";
         
-        return $conexao->query($sql, array(":nome" => $this->getNome(), ":profissao" => $this->getProfissao(), ":endereco" => $this->getEndereco(), ":numhab" => $this->getNumhab(), ":tel1" => $this->getTel1(), ":tel2" => $this->getTel2(), ":bairro" => $this->getBairro(), ":cidade" => $this->getCidade(), ":cpf" => $this->getCpf(), ":uf" => $this->getUf(), ":cep" => $this->getCep(), ":email" => $this->getEmail(), ":id" => $this->getId()));
+        return $conexao->query($sql, array(":nome" => $this->getNome(), ":rgpassport" => $this->getRg(), ":numhab" => $this->getHab(), ":numregistro" => $this->getReg(), ":validade" => $this->getVal(), ":cpf" => $this->getCpf(), ":id" => $this->getId()));
 
     }
 }

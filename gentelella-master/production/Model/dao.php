@@ -56,6 +56,13 @@
         }
     }
 
+    public function checkUpdate(){
+
+        if($_SESSION['usuarioNiveisAcessoId'] == 3 or $_SESSION['usuarioNiveisAcessoId'] == 4){
+            $_SESSION['UsuarioErro'] = "Você não tem permissão para atualização de registrosX!";
+            return true;
+        }
+    }
 
   }
 

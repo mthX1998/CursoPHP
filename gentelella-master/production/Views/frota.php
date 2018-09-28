@@ -1,5 +1,11 @@
 <?php
-   session_start();
+
+  require_once '../Controllers/config.php';
+
+  session_start();
+  
+  $veiculo = new Veiculo();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,6 +42,8 @@
     <link href="../../build/css/custom.min.css" rel="stylesheet">
 
     <link href="../../build/css/table.css" rel="stylesheet">
+
+    <link href="../../build/css/sessao.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -132,25 +140,57 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  <p class="warning-sucesso">
+                     <?php if(isset($_SESSION['CadastroVeiculo'])){
+                     echo $_SESSION['CadastroVeiculo'];
+                     unset($_SESSION['CadastroVeiculo']);
+                     }
+                    ?>
+                   </p>
+                   <p class="warning-erro">
+                     <?php                  
+                     if(isset($_SESSION['UsuarioErro'])){
+                      echo $_SESSION['UsuarioErro'];
+                      unset($_SESSION['UsuarioErro']);
+                      }
+                     
+                     
+                     if(isset($_SESSION['CadastroVeiculoErro'])){
+                     echo $_SESSION['CadastroVeiculoErro'];
+                     unset($_SESSION['CadastroVeiculoErro']);
+                     }
+                    ?>
+                   </p>
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <?php if(isset($_GET['acao']) && $_GET['acao'] == 'editar'): ?>
+
+                    <?php
+
+                      $id = (int)$_GET['id'];
+
+                      $resultado = $veiculo->find($id);
+
+                    ?>
+
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/atualizarVeiculo.php">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Marca<span class="required">*</span>
                         </label>
                         <div class="col-md-2 col-sm-6 col-xs-12">
-                          <input type="text" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="first-name" name="marca" value="<?php echo $resultado->marca; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Modelo<span class="required">*</span>
                         </label>
                         <div class="col-md-2 col-sm-6 col-xs-12">
-                          <input type="text" id="last-name" name="profissao" required="required"  class="form-control col-md-7 col-xs-12">
+                          <input type="text" id="last-name" name="modelo" value="<?php echo $resultado->modelo; ?>" required="required"  class="form-control col-md-7 col-xs-12">
                         </div>
                       
                       <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Ano<span class="required">*</span>
                       </label>
                       <div class="col-md-2 col-sm-6 col-xs-12">
-                        <input type="number" id="last-name" name="profissao" required="required"  class="form-control col-md-7 col-xs-12">
+                        <input type="number" id="last-name" name="ano" value="<?php echo $resultado->ano; ?>" required="required"  class="form-control col-md-7 col-xs-12">
                       </div>
                       </div>
                     
@@ -158,25 +198,20 @@
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Motor<span class="required">*</span>
                             </label>
                             <div class="col-md-1 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="endereco" required="required"  class="form-control col-md-7 col-xs-12">
+                              <input type="" id="last-name" name="motor" value="<?php echo $resultado->motor; ?>" required="required"  class="form-control col-md-7 col-xs-12">
                          </div>
-                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">KM<span class="required">*</span>
-                         </label>
-                         <div class="col-md-2 col-sm-6 col-xs-12">
-                           <input type="text" id="last-name" name="cep" required="required"  class="form-control col-md-7 col-xs-12">
-                      </div>
                       <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Cor<span class="required">*</span>
                       </label>
                       <div class="col-md-2 col-sm-6 col-xs-12">
-                        <input type="text" id="last-name" name="telefone1" required="required"  class="form-control col-md-3 col-xs-12">
+                        <input type="text" id="last-name" name="cor" value="<?php echo $resultado->cor; ?>" required="required"  class="form-control col-md-3 col-xs-12">
                       </div>
                      </div>
                      <div class="form-group">
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Combustível<span class="required">*</span>
                             </label>
                             <div class="col-md-3 col-sm-6 col-xs-12">
-                                <select class="form-control" name="priv">
-                                        <option value="Álcool">Alcool</option>
+                                <select class="form-control" name="comb">
+                                        <option value="Alcool">Alcool</option>
                                         <option value="Gasolina">Gasolina</option>
                                         <option value="Flex">Flex</option>
                                         <option value="Diesel">Diesel</option>
@@ -186,7 +221,7 @@
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Chassi <span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <input type="text" id="last-name" name="bairro" required="required"  class="form-control col-md-3 col-xs-12">
+                          <input type="text" id="last-name" name="chassi" value="<?php echo $resultado->chass; ?>" required="required"  class="form-control col-md-3 col-xs-12">
                         </div>
 
                      </div>
@@ -194,39 +229,172 @@
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Observações
                             </label>
                             <div class="col-md-8 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="bairro" class="form-control col-md-3 col-xs-12">
+                              <input type="text" id="last-name" name="obs" value="<?php echo $resultado->obs; ?>" class="form-control col-md-3 col-xs-12">
                             </div>
                      </div>
                      <div class="form-group">
                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Status<span class="required">*</span>
                      </label>
                      <div class="col-md-3 col-sm-6 col-xs-12">
-                        <select class="form-control" name="priv">
-                                <option value="Álcool">Disponível</option>
-                                <option value="Gasolina">Reservado</option>
-                                <option value="Flex">Locado</option>
+                        <select class="form-control" name="situa">
+                                <option value="Disponivel">Disponível</option>
+                                <option value="Reservado">Reservado</option>
+                                <option value="Locado">Locado</option>
 
                         </select>
                     </div>
+
                     <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Placa<span class="required">*</span>
                     </label>
                     <div class="col-md-2 col-sm-6 col-xs-12">
-                      <input type="text" id="last-name" name="bairro" required="required" class="form-control col-md-3 col-xs-12">
+                      <input type="text" id="last-name" name="placa" value="<?php echo $resultado->placa; ?>" required="required" class="form-control col-md-3 col-xs-12">
                     </div>
+                    <input type="hidden" name="id" value="<?php echo $resultado->id; ?>">
+
                     </div>
-                     
                      
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
-						  <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                          <button type="submit" class="btn btn-round btn-success">Cadastrar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                          <a href="frota.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+						              <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-primary">Atualizar Veículo <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
                         </div>
                       </div>
 
                     </form>
+
+                    <?php else: ?>
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/cadastrarVeiculo.php">
+
+                    <div class="form-group">
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Marca<span class="required">*</span>
+                      </label>
+                      <div class="col-md-2 col-sm-6 col-xs-12">
+                        <input type="text" id="first-name" name="marca" required="required" class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Modelo<span class="required">*</span>
+                      </label>
+                      <div class="col-md-2 col-sm-6 col-xs-12">
+                        <input type="text" id="last-name" name="modelo" required="required"  class="form-control col-md-7 col-xs-12">
+                      </div>
+
+                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Ano<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                      <input type="number" id="last-name" name="ano" required="required"  class="form-control col-md-7 col-xs-12">
+                    </div>
+                    </div>
+
+                    <div class="form-group">
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Motor<span class="required">*</span>
+                          </label>
+                          <div class="col-md-1 col-sm-6 col-xs-12">
+                            <input type="" id="last-name" name="motor" required="required"  class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">KM<span class="required">*</span>
+                      </label>
+                      <div class="col-md-2 col-sm-6 col-xs-12">
+                        <input type="number" id="last-name" name="km" required="required"  class="form-control col-md-7 col-xs-12">
+                    </div>
+                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Cor<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                      <input type="text" id="last-name" name="cor" required="required"  class="form-control col-md-3 col-xs-12">
+                    </div>
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Combustível<span class="required">*</span>
+                          </label>
+                          <div class="col-md-3 col-sm-6 col-xs-12">
+                              <select class="form-control" name="comb">
+                                      <option value="Alcool">Alcool</option>
+                                      <option value="Gasolina">Gasolina</option>
+                                      <option value="Flex">Flex</option>
+                                      <option value="Diesel">Diesel</option>
+                              </select>
+                      </div>
+
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Chassi <span class="required">*</span>
+                      </label>
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                        <input type="text" id="last-name" name="chassi" required="required"  class="form-control col-md-3 col-xs-12">
+                      </div>
+
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Observações
+                          </label>
+                          <div class="col-md-8 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="obs" class="form-control col-md-3 col-xs-12">
+                          </div>
+                    </div>
+                    <div class="form-group">
+                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Status<span class="required">*</span>
+                    </label>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                      <select class="form-control" name="situa">
+                              <option value="Disponivel">Disponível</option>
+                              <option value="Reservado">Reservado</option>
+                              <option value="Locado">Locado</option>
+
+                      </select>
+                    </div>
+
+                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Placa<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                    <input type="text" id="last-name" name="placa" required="required" class="form-control col-md-3 col-xs-12">
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Venc.Documentação<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                    <input type="date" id="last-name" name="doc" required="required" class="form-control col-md-3 col-xs-12">
+                    </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+
+                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Próx. Troca Óleo<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                    <input type="number" id="last-name" name="oleo" required="required" class="form-control col-md-3 col-xs-12">
+                    </div>
+
+                    <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Próx. Troca Filtro Óleo<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                    <input type="number" id="last-name" name="filtro" required="required" class="form-control col-md-3 col-xs-12">
+                    </div>
+
+                    <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Próx. Vistoria<span class="required">*</span>
+                    </label>
+                    <div class="col-md-2 col-sm-6 col-xs-12">
+                    <input type="date" id="last-name" name="vistoria" required="required" class="form-control col-md-3 col-xs-12">
+                    </div>
+
+                    </div> 
+
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                       <a href="frota.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                    <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                        <button type="submit" class="btn btn-round btn-success">Cadastrar Veículo <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                      </div>
+                    </div>
+
+                    </form>
+
+                   <?php endif; ?>
+
+
                   </div>
                 </div>
 
@@ -249,38 +417,38 @@
                                     <th class="column-title">Modelo</th>
                                     <th class="column-title" style="width: 60px">Ano</th>
                                     <th class="column-title">Motor</th>
-                                    <th class="column-title">KM</th>
                                     <th class="column-title">Cor</th>
                                     <th class="column-title">Placa</th>
                                     <th class="column-title">Combustível</th>
                                     <th class="column-title">Chassi</th>
                                     <th class="column-title">Observações</th>
                                     <th class="column-title">Status</th>
-                                    <th class="column-title">Usuário</th>
-                                    <th class="column-title no-link last" colspan="4" style="text-indent: 140px">Ações</th>
+                                    <th class="column-title no-link last" colspan="5" style="text-indent: 260px">Ações</th>
                                   </tr>
                                 </thead>
         
                                 <tbody>
+                                <?php foreach ($veiculo->findAll() as $key => $value): ?>
                                   <tr class="even pointer">
-                                    <td class=" ">1</td>
-                                    <td class=" ">Chevrolet</td>
-                                    <td class=" ">S10</td>
-                                    <td class=" ">2012</td>
-                                    <td class=" ">2.2 Turbo</td>
-                                    <td class=" ">70.000</td>
-                                    <td class=" ">Branco</td>
-                                    <td class="placa">DFK-6796</td>
-                                    <td class=" ">Gasolina</td>
-                                    <td class=" ">124YHB5879NM</td>
-                                    <td class="obs">Carro com barulho estranho na roda dianteira depois do volante</td>
-                                    <td class=" ">Disponível</td>
-                                    <td class=" " style="text-align: center">2</td>
-                                    <td class=" last"><a href="multas.php">Multas <span class="glyphicon glyphicon-facetime-video" aria-hidden="true"></span></a></td>
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->marca; ?></td>
+                                    <td class=" "><?php echo $value->modelo; ?></td>
+                                    <td class=" "><?php echo $value->ano; ?></td>
+                                    <td class=" "><?php echo $value->motor; ?></td>
+                                    <td class=" "><?php echo $value->cor; ?></td>
+                                    <td class=" "><?php echo $value->placa; ?></td>
+                                    <td class=" " style="text-indent: 20px;"><?php echo $value->comb; ?></td>
+                                    <td class=" "><?php echo $value->chass; ?></td>
+                                    <td class="obs"><?php echo $value->obs; ?></td>
+                                    <td class=" "><?php echo $value->situa; ?></td>
+                                    <td class=" last"> <?php echo "<a href='multas.php?id=" . $value->id . "'>Multas <span class='glyphicon glyphicon-facetime-video' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last"> <?php echo "<a href='manutencao.php?id=" . $value->id . "'>Manutenção <span class='glyphicon glyphicon-wrench' aria-hidden='true'></span></a> "; ?></td>
                                     <td class=" last"><a href="historico.php">Histórico <span class="glyphicon glyphicon-book" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                                    <td class=" last"> <?php echo "<a href='frota.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last"> <?php echo "<a class='delete' href='../Controllers/deletarVeiculo.php?&id=" . $value->id . "' data-confirm-veiculo='Deseja excluir este veículo? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
+
+                                  <?php endforeach; ?>
                                 </tbody>
                               </table>
                             </div>
@@ -344,6 +512,8 @@
     <script src="../../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+
+    <script src="../../build/js/modalVeiculo.js"></script>
 	
   </body>
 </html>

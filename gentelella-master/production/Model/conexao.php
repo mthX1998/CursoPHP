@@ -48,6 +48,14 @@
 
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
 	}
+
+	public function login($rawQuery, $params = array()):array
+	{
+
+		$stmt = $this->query($rawQuery, $params);
+
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
  }
 
 ?>

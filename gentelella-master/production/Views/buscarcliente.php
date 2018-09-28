@@ -4,6 +4,9 @@ require_once '../Controllers/config.php';
 session_start();
 
 $cliente = new Cliente();
+
+$a = 2;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -137,7 +140,7 @@ $cliente = new Cliente();
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="#">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?a=buscar">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Nome 
@@ -160,7 +163,7 @@ $cliente = new Cliente();
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <a href="index.html"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                          <a href="buscarcliente.php?a=standby"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
                           <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
                           <button type="submit" class="btn btn-round btn-primary">Buscar <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                         </div>
@@ -203,8 +206,14 @@ $cliente = new Cliente();
                                 
         
                                 <tbody>
-                                <?php if($_SERVER['REQUEST_METHOD']=='POST'): ?>
-                                <?php $nome = $_POST['nome']; $cpf = $_POST['cpf']; ?>
+                                <?php
+
+                                $a = $_GET['a'];
+                                            
+                                if($a == 'buscar'):
+
+                                ?>
+                                <?php $nome = $_POST['nome']; $cpf = $_POST['cpf'];?>
                                 <?php foreach ($cliente->findClientes($nome,$cpf) as $key => $value): ?>
                                   <tr class="even pointer">
                                     <td class=" "><?php echo $value->id; ?></td>
@@ -222,12 +231,13 @@ $cliente = new Cliente();
                                     <td class=" "><?php echo $value->email; ?></td>
                                     <td class=" " style="text-align: center"><?php echo $value->usuario; ?></td>
                                     <td class=" last" style="width: 100px"> <?php echo "<a href='condutores.php?id=" . $value->id . "'>Condutores <span class='glyphicon glyphicon-user' aria-hidden='true'></span></a> "; ?></td>
-                                    <td class=" last" style="width: 80px"> <?php echo "<a href='clientes.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" style="width: 80px"> <?php echo "<a href='clientes.php?id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
                                     <td class=" last" style="width: 80px"> <?php echo "<a class='delete' href='../Controllers/deletarCliente.php?&id=" . $value->id . "' data-confirm-cliente='Deseja excluir este cliente? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
                                   <?php endforeach; ?>
-                          
-                                  <?php endif; ?>
+                        
+
+                                  <?php else: ?>
 
                                 <?php foreach ($cliente->findAll() as $key => $value): ?>
                                   <tr class="even pointer">
@@ -251,6 +261,8 @@ $cliente = new Cliente();
                                   </tr>
                                   
                                   <?php endforeach; ?>
+
+                                  <?php endif; ?>
                                 </tbody>
                               </table>
                             </div>
@@ -315,5 +327,6 @@ $cliente = new Cliente();
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
 	
+    <script src="../../build/js/modalCliente.js"></script>
   </body>
 </html>

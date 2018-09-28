@@ -36,12 +36,16 @@ $cliente->setEmail($email);
 $cliente->setNumhab($hab);
 $cliente->setIduser($user);
 
-if($cliente->update($id)){
+if($cliente->checkUpdate()){
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuario'] = "Cliente atualizado com Sucesso!";
+}
+
+else if($cliente->update($id)){
+    header("Location: ../Views/clientes.php");
+    $_SESSION['CadastroCliente'] = "Cliente atualizado com Sucesso!";
 }else{
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuarioErro'] = "ERRO";
+    $_SESSION['CadastroClienteErro'] = "ERRO";
 }
 
 

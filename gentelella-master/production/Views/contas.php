@@ -1,5 +1,10 @@
 <?php
-   session_start();
+  
+  require_once '../Controllers/config.php';
+
+  session_start();
+ 
+  $conta = new Conta();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,6 +39,8 @@
 
     <!-- Custom Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
+
+    <link href="../../build/css/sessao.css" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -130,21 +137,50 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  <p class="warning-sucesso">
+                     <?php if(isset($_SESSION['CadastroConta'])){
+                     echo $_SESSION['CadastroConta'];
+                     unset($_SESSION['CadastroConta']);
+                     }
+                    ?>
+                   </p>
+                   <p class="warning-erro">
+                     <?php                  
+                     if(isset($_SESSION['UsuarioErro'])){
+                      echo $_SESSION['UsuarioErro'];
+                      unset($_SESSION['UsuarioErro']);
+                      }
+                     
+                     
+                     if(isset($_SESSION['CadastroContaErro'])){
+                     echo $_SESSION['CadastroContaErro'];
+                     unset($_SESSION['CadastroContaErro']);
+                     }
+                    ?>
+                   </p>
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <?php if(isset($_GET['acao']) && $_GET['acao'] == 'editar'): ?>
+
+                    <?php  
+                      $id = (int)$_GET['id'];
+
+                      $resultado = $conta->find($id);
+
+                    ?>
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/atualizarConta.php">
 
                       <div class="form-group">
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Valor<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <input type="number" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="" id="first-name" name="valor" value="<?php echo $resultado->valor; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                         <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Tipo<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                                <select class="form-control" name="priv">
-                                        <option value="1">Á PAGAR</option>
-                                        <option value="2">Á RECEBER</option>
+                                <select class="form-control" name="tipo">
+                                        <option value="A Pagar">Á PAGAR</option>
+                                        <option value="A Receber">Á RECEBER</option>
                                 </select>
                         </div>
                       </div>
@@ -152,25 +188,71 @@
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Referente<span class="required">*</span>
                             </label>
                             <div class="col-md-5 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="senha" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="text" id="last-name" name="ref" value="<?php echo $resultado->ref; ?>" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
                             <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Vencimento<span class="required">*</span>
                             </label>
                             <div class="col-md-2 col-sm-6 col-xs-12">
-                              <input type="date" id="last-name" name="vencimento" required="required" class="form-control col-md-7 col-xs-12">
+                              <input type="date" id="last-name" name="venc" value="<?php echo $resultado->venc; ?>" required="required" class="form-control col-md-7 col-xs-12">
                             </div>
+                            <input type="hidden" name="id" value="<?php echo $resultado->id; ?>">
                           </div>            
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                         <a href="contas.php" ><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
 						  <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                          <button type="submit" class="btn btn-round btn-success">Cadastrar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-primary">Atualizar Conta <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
                         </div>
                       </div>
 
                     </form>
+
+                    <?php else: ?>
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/cadastrarConta.php">
+
+                    <div class="form-group">
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Valor<span class="required">*</span>
+                      </label>
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                        <input type="" id="first-name" name="valor" required="required" class="form-control col-md-7 col-xs-12">
+                      </div>
+                      <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Tipo<span class="required">*</span>
+                      </label>
+                      <div class="col-md-3 col-sm-6 col-xs-12">
+                              <select class="form-control" name="tipo">
+                                      <option value="A Pagar">Á PAGAR</option>
+                                      <option value="A Receber">Á RECEBER</option>
+                              </select>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Referente<span class="required">*</span>
+                          </label>
+                          <div class="col-md-5 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="ref" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                          <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Vencimento<span class="required">*</span>
+                          </label>
+                          <div class="col-md-2 col-sm-6 col-xs-12">
+                            <input type="date" id="last-name" name="venc" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>            
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                      <a href="contas.php" ><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+                    <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                        <button type="submit" class="btn btn-round btn-success">Gerar Conta <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                      </div>
+                    </div>
+
+                    </form>
+
+                    <?php endif; ?>
                   </div>
                 </div>
 
@@ -199,16 +281,19 @@
                                 </thead>
         
                                 <tbody>
+                                <?php foreach ($conta->findAll() as $key => $value): ?>
+                                <?php $datavencimento = new Datetime($value->venc); ?>
                                   <tr class="even pointer">
-                                    <td class=" ">1</td>
-                                    <td class=" ">590,00</td>
-                                    <td class=" ">Á PAGAR</td>
-                                    <td class=" ">Empréstimo Caixa</td>
-                                    <td class=" ">22/10/2018</td>
-                                    <td class=" ">2</td>
-                                    <td class=" last"><a href="#">Editar <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a></td>
-                                    <td class=" last"><a class="delete" href="#">Excluir <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></a></td>
+                                    <td class=" "><?php echo $value->id; ?></td>
+                                    <td class=" "><?php echo $value->valor; ?></td>
+                                    <td class=" "><?php echo $value->tipo; ?></td>
+                                    <td class=" "><?php echo $value->ref; ?></td>
+                                    <td class=" "><?php echo $datavencimento->format("d/m/Y"); ?></td>
+                                    <td class=" " style="text-indent: 20px;"><?php echo $value->usuario; ?></td>
+                                    <td class=" last" > <?php echo "<a href='contas.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                    <td class=" last" > <?php echo "<a class='delete' href='../Controllers/deletarConta.php?&id=" . $value->id . "' data-confirm-conta='Deseja excluir esta conta? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
+                                <?php endforeach; ?>
                                 </tbody>
                               </table>
                             </div>
@@ -272,6 +357,8 @@
     <script src="../../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+
+    <script src="../../build/js/modalConta.js"></script>
 	
   </body>
 </html>

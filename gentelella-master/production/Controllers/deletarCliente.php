@@ -14,10 +14,10 @@
     }
     else if($cliente->delete($id)){
         header("Location: ../Views/clientes.php");
-        $_SESSION['CadastroUsuario'] = "Cliente Excluído com Sucesso!";
+        $_SESSION['CadastroCliente'] = "Cliente Excluído com Sucesso!";
     }else{
         header("Location: ../Views/clientes.php");
-        $_SESSION['CadastroUsuarioErro'] = "ERRO ao excluir Cliente!";
+        $_SESSION['CadastroClienteErro'] = "ERRO ao excluir Cliente!";
     }
 
     

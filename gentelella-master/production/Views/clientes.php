@@ -140,9 +140,9 @@
                   </div>
                   <div class="x_content">
                   <p class="warning-sucesso">
-                     <?php if(isset($_SESSION['CadastroUsuario'])){
-                     echo $_SESSION['CadastroUsuario'];
-                     unset($_SESSION['CadastroUsuario']);
+                     <?php if(isset($_SESSION['CadastroCliente'])){
+                     echo $_SESSION['CadastroCliente'];
+                     unset($_SESSION['CadastroCliente']);
                      }
                     ?>
                    </p>
@@ -154,9 +154,9 @@
                       }
                      
                      
-                     if(isset($_SESSION['CadastroUsuarioErro'])){
-                     echo $_SESSION['CadastroUsuarioErro'];
-                     unset($_SESSION['CadastroUsuarioErro']);
+                     if(isset($_SESSION['CadastroClienteErro'])){
+                     echo $_SESSION['CadastroClienteErro'];
+                     unset($_SESSION['CadastroClienteErro']);
                      }
                     ?>
                    </p>

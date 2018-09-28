@@ -41,10 +41,10 @@ if($cliente->checkCreate()){
 }
 else if($cliente->insert()){
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuario'] = "Cliente Cadastrado com Sucesso!";
+    $_SESSION['CadastroCliente'] = "Cliente Cadastrado com Sucesso!";
 }else{
     header("Location: ../Views/clientes.php");
-    $_SESSION['CadastroUsuarioErro'] = "ERRO ao cadastrar Cliente";
+    $_SESSION['CadastroClienteErro'] = "ERRO ao cadastrar Cliente";
 }
 
 

@@ -10,7 +10,7 @@
                     $senha = $_POST['senha'];
 
                     //Buscar na tabela usuario o usuário que corresponde com os dados digitado no formulário
-                    $resultado = $conn->select("SELECT * FROM usuarios WHERE BINARY nome = '$usuario' and BINARY senha = '$senha' LIMIT 1");
+                    $resultado = $conn->login("SELECT * FROM usuarios WHERE BINARY nome = '$usuario' and BINARY senha = '$senha' LIMIT 1");
 
                     if (count($resultado) <= 0)
                     {
@@ -19,6 +19,7 @@
                     }
                     
                     $res = $resultado[0];
+
                     //Encontrado um usuario na tabela usuário com os mesmos dados digitado no formulário
                     if(isset($resultado)){
                             $_SESSION['usuarioId'] = $res['id'];

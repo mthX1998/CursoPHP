@@ -1,5 +1,12 @@
 <?php
-   session_start();
+
+  require_once '../Controllers/config.php';
+
+  session_start();
+  
+  $conta = new Conta();
+
+  $a = 2;
 ?>
 <html lang="en">
   <head>
@@ -130,25 +137,25 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?a=buscar">
 
                       <div class="form-group">
                         <label class="control-label col-md-2 col-sm-3 col-xs-12" for="first-name">Data Inicial<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                          <input type="date" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="date" id="first-name" name="inicio" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                         <label class="control-label col-md-2 col-sm-3 col-xs-12" for="last-name">Data Final<span class="required">*</span>
                         </label>
                         <div class="col-md-3 col-sm-6 col-xs-12">
-                            <input type="date" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">  
+                            <input type="date" id="first-name" name="fim" required="required" class="form-control col-md-7 col-xs-12">  
                         </div>
                       </div>           
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                          <button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button>
+                          <a href="balancofinanceiro.php?a=standby"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
 						  <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
                           <button type="submit" class="btn btn-round btn-success">Gerar Balanço <span class="glyphicon glyphicon-signal" aria-hidden="true"></span></button>
                         </div>
@@ -250,7 +257,42 @@
               labels: ["Á pagar", "Á receber"],
               datasets: [{
                   label: '# of Votes',
-                  data: [50, 55],
+                  data: [
+                    <?php 
+
+                    $a = $_GET['a'];
+
+                    if($a == 'buscar'){
+
+                    $inicio = $_POST['inicio'];
+                    $fim = $_POST['fim'];  
+
+                    echo $conta->getPagarDate($inicio,$fim);
+
+                    }else{
+                    echo $conta->getPagar(); 
+                    }
+                    ?>
+                    , 
+
+                    <?php
+
+                    $a = $_GET['a'];
+
+                    if($a == 'buscar'){
+
+                    $inicio = $_POST['inicio'];
+                    $fim = $_POST['fim'];  
+
+                    echo $conta->getReceberDate($inicio,$fim);
+
+                    }
+                    else{
+                    echo $conta->getReceber(); 
+                    }
+                    ?>
+                    
+                    ],
                   backgroundColor: [
                       'rgba(255, 99, 132, 0.7)',
                       'rgba(54, 162, 235, 0.7)'

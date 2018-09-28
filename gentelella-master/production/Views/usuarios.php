@@ -1,14 +1,12 @@
 <?php
+   require_once '../Controllers/config.php';
 
-require_once '../Controllers/config.php';
+   session_start();
 
-session_start();
-
-$conta = new Conta();
-
-$a = 2;
-
+   $usuario = new Usuario();
+                          
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -19,7 +17,7 @@ $a = 2;
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="images/favicon.ico" type="image/ico" />
 	  
-    <title>Bem vindo ao sistema PC Rent a Car </title>
+    <title>Bem vindo ao sistema PC Rent a Car</title>
 
     <!-- Bootstrap -->
     <link href="../../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -42,9 +40,17 @@ $a = 2;
 
     <!-- Custom Theme Style -->
     <link href="../../build/css/custom.min.css" rel="stylesheet">
+    <link href="../../build/css/sessao.css" rel="stylesheet">
+    <link href="../../build/css/table.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One" rel="stylesheet">
   </head>
 
   <body class="nav-md">
+   
+    <?php
+
+    ?>
+
     <div class="container body">
       <div class="main_container">
             <div class="col-md-3 left_col">
@@ -66,7 +72,7 @@ $a = 2;
                       <br />
           
                       <!-- sidebar menu -->
-                      <?php
+                     <?php
                         if($_SESSION['usuarioNiveisAcessoId'] == 1){
                         include("Menus/menu1.php");
                         }
@@ -125,7 +131,7 @@ $a = 2;
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Contas</h3>
+                <h3>Cadastro de usuários</h3>
               </div>
 
             </div>
@@ -134,121 +140,169 @@ $a = 2;
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Cadastrar nova conta <small>Campos com * são obrigatórios</small></h2>
+                    <h2>Formulário de cadastro  <small>Campos com * são obrigatórios</small></h2>
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                  <p class="warning-sucesso">
+                     <?php if(isset($_SESSION['CadastroUsuario'])){
+                     echo $_SESSION['CadastroUsuario'];
+                     unset($_SESSION['CadastroUsuario']);
+                     }
+                    ?>
+                   </p>
+                   <p class="warning-erro">
+                     <?php if(isset($_SESSION['CadastroUsuarioErro'])){
+                     echo $_SESSION['CadastroUsuarioErro'];
+                     unset($_SESSION['CadastroUsuarioErro']);
+                     }
+                    ?>
+                   </p>
                     <br />
-                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>?a=buscar">
+
+                    <?php if(isset($_GET['acao']) && $_GET['acao'] == 'editar'): ?>
+
+                    <?php  
+                       $id = (int)$_GET['id'];
+
+                       $resultado = $usuario->find($id);
+                    
+                    ?>
+
+                      <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/atualizarUsuario.php">
 
                       <div class="form-group">
-                        <label class="control-label col-md-1 col-sm-3 col-xs-12" for="first-name">Valor
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nome <span class="required">*</span>
                         </label>
-                        <div class="col-md-3 col-sm-6 col-xs-12">
-                          <input type="" id="first-name" name="valor" class="form-control col-md-7 col-xs-12">
-                        </div>
-                        <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Tipo<span class="required">*</span>
-                        </label>
-                        <div class="col-md-3 col-sm-6 col-xs-12">
-                                <select class="form-control" name="tipo">
-                                        <option value="A Pagar">Á PAGAR</option>
-                                        <option value="A Receber">Á RECEBER</option>
-                                </select>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" name="nome" value="<?php echo $resultado->nome; ?>" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="form-group">
-                            <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Referente<span class="required">*</span>
-                            </label>
-                            <div class="col-md-5 col-sm-6 col-xs-12">
-                              <input type="text" id="last-name" name="ref" class="form-control col-md-7 col-xs-12">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Nova Senha <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="password" id="last-name" name="senha"  required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Confirma Senha<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="password" id="last-name" name="confirmsenha" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                        <input type="hidden" name="id" value="<?php echo $resultado->id; ?>">
+                      </div>
+                      <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Privilégio</label>
+                            <div class="col-md-2 col-sm-9 col-xs-12">
+                              <select class="form-control" name="priv">
+                                <option value="1">1 - Master</option>
+                                <option value="2">2 - Gestor</option>
+                                <option value="3" selected="selected">3 - Colaborador</option>
+                                <option value="4">4 - Expectador</option>
+                              </select>
                             </div>
-                            <label class="control-label col-md-1 col-sm-3 col-xs-12" for="last-name">Vencimento
-                            </label>
-                            <div class="col-md-2 col-sm-6 col-xs-12">
-                              <input type="date" id="last-name" name="venc"  class="form-control col-md-7 col-xs-12">
-                            </div>
-                          </div>            
-
+                          </div>
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                        <a href="buscarcontas.php?a=standby"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
-						  <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
-                          <button type="submit" class="btn btn-round btn-primary">Buscar <span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                          <a href="usuarios.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+						             <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-primary">Atualizar <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
                         </div>
                       </div>
 
                     </form>
+
+                    <?php else: ?>
+
+                    <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left" method="post" action="../Controllers/cadastrarUsuario.php">
+
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nome <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="text" id="first-name" name="nome" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Senha <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="password" id="last-name" name="senha" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last-name">Confirma Senha<span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="password" id="last-name" name="confirmsenha" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                            <label class="control-label col-md-3 col-sm-3 col-xs-12">Privilégio</label>
+                            <div class="col-md-2 col-sm-9 col-xs-12">
+                              <select class="form-control" name="priv">
+                                <option value="1">1 - Master</option>
+                                <option value="2">2 - Gestor</option>
+                                <option value="3" selected="selected">3 - Colaborador</option>
+                                <option value="4">4 - Expectador</option>
+                              </select>
+                            </div>
+                          </div>
+                      <div class="ln_solid"></div>
+                      <div class="form-group">
+                        <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                          <a href="usuarios.php"><button class="btn btn-round btn-danger" type="button">Cancelar <span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></button></a>
+						             <button class="btn btn-round btn-warning" type="reset">Resetar <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></button>
+                          <button type="submit" class="btn btn-round btn-success">Gerar Usuário <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span></button>
+                        </div>
+                      </div>
+
+                    </form>
+
+                    <?php endif; ?>
+
                   </div>
                 </div>
+
 
                 <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="x_panel">
                           <div class="x_title">
-                            <h2>Contas:</h2>
+                            <h2>Usuários</h2>
                             <div class="clearfix"></div>
                           </div>
         
                           <div class="x_content">
-        
                             <div class="table-responsive">
                               <table class="table table-striped jambo_table bulk_action">
                                 <thead>
                                   <tr class="headings">
 
                                     <th class="column-title">Id</th>
-                                    <th class="column-title">Valor</th>
-                                    <th class="column-title">Tipo</th>
-                                    <th class="column-title">Referente</th>
-                                    <th class="column-title">Vencimento</th>
-                                    <th class="column-title">Usuário</th>
-                                    <th class="column-title no-link last" colspan="2" style="text-indent: 60px">Ações</th>
+                                    <th class="column-title">Nome</th>
+                                    <th class="column-title">Senha</th>
+                                    <th class="column-title">Privilégio</th>
+                                    <th class="column-title no-link last" colspan="2" style="text-indent: 80px">Ações</th>
                                   </tr>
                                 </thead>
         
                                 <tbody>
-                                <?php
+                                <?php foreach ($usuario->findAll() as $key => $value): ?>
 
-                                $a = $_GET['a'];
-                                            
-                                if($a == 'buscar'):
-
-                                ?>
-                                <?php $ref = $_POST['ref']; $tipo = $_POST['tipo']; $valor = $_POST['valor']; $venc = $_POST['venc']; ?>
-                                <?php foreach ($conta->findContas($ref,$tipo,$valor,$venc) as $key => $value): ?>
-                                <?php $datavencimento = new Datetime($value->venc); ?>
-                                <tr class="even pointer">
-                                    <td class=" "><?php echo $value->id; ?></td>
-                                    <td class=" "><?php echo $value->valor; ?></td>
-                                    <td class=" "><?php echo $value->tipo; ?></td>
-                                    <td class=" "><?php echo $value->ref; ?></td>
-                                    <td class=" "><?php echo $datavencimento->format("d/m/Y"); ?></td>
-                                    <td class=" " style="text-indent: 20px;"><?php echo $value->usuario; ?></td>
-                                    <td class=" last" > <?php echo "<a href='contas.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
-                                    <td class=" last" > <?php echo "<a class='delete' href='../Controllers/deletarConta.php?&id=" . $value->id . "' data-confirm-conta='Deseja excluir esta conta? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
-                                  </tr>
-
-                                  <?php endforeach; ?>
-
-
-                                  <?php else: ?>
-
-                                <?php foreach ($conta->findAll() as $key => $value): ?>
-                                <?php $datavencimento = new Datetime($value->venc); ?>
                                   <tr class="even pointer">
-                                    <td class=" "><?php echo $value->id; ?></td>
-                                    <td class=" "><?php echo $value->valor; ?></td>
-                                    <td class=" "><?php echo $value->tipo; ?></td>
-                                    <td class=" "><?php echo $value->ref; ?></td>
-                                    <td class=" "><?php echo $datavencimento->format("d/m/Y"); ?></td>
-                                    <td class=" " style="text-indent: 20px;"><?php echo $value->usuario; ?></td>
-                                    <td class=" last" > <?php echo "<a href='contas.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
-                                    <td class=" last" > <?php echo "<a class='delete' href='../Controllers/deletarConta.php?&id=" . $value->id . "' data-confirm-conta='Deseja excluir esta conta? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
+                                  <td class=" "><?php echo $value->id; ?></td>
+                                  <td class=" "><?php echo $value->nome; ?></td>
+                                  <td class=" "><?php echo $value->senha; ?></td>
+                                  <td class="centralized"><?php echo $value->nivel; ?></td>
+                                  <td class=" last"> <?php echo "<a href='usuarios.php?acao=editar&id=" . $value->id . "'>Editar <span class='glyphicon glyphicon-pencil' aria-hidden='true'></span></a> "; ?></td>
+                                  <td class=" last"> <?php echo "<a class='delete' href='../Controllers/deletarUsuario.php?&id=" . $value->id . "' data-confirm='Deseja excluir este usuário? '>Excluir <span class='glyphicon glyphicon-remove' aria-hidden='true'></span></a> "; ?></td>
                                   </tr>
-                                  
-                                  <?php endforeach; ?>
 
-                                  <?php endif; ?>
+                                <?php endforeach; ?>
+                                
                                 </tbody>
                               </table>
                             </div>
@@ -312,6 +366,8 @@ $a = 2;
     <script src="../../vendors/starrr/dist/starrr.js"></script>
     <!-- Custom Theme Scripts -->
     <script src="../../build/js/custom.min.js"></script>
+
+    <script src="../../build/js/modal.js"></script>
 	
   </body>
 </html>

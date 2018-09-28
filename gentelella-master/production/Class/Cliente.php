@@ -6,7 +6,7 @@ require_once '../Model/dao.php';
 class Cliente extends dao{
 
 
-    protected $table = 'clientes';
+    protected $table = 'Clientes';
     private $id;
     private $nome;
     private $profissao;
@@ -161,9 +161,9 @@ class Cliente extends dao{
         
         $conexao = new Conexao();
 
-        $sql = "SELECT * FROM $this->table WHERE nome LIKE '%:nome%' AND cpf LIKE '%:cpf%' ";
+        $sql = "SELECT * FROM $this->table WHERE nome LIKE '%". $nome ."%' AND cpf LIKE '%". $cpf ."%'";
 
-        return $conexao->select($sql, array(":nome" => $nome, ":cpf" => $cpf));
+        return $conexao->select($sql, array(":nome" => $nome , ":cpf" => $cpf));
     }
 
 
